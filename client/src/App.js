@@ -42,26 +42,22 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const load = async () => {
-      // Stores a given value, 5 by default.
-      await contract.methods.set(5).send({ from: accounts[0] });
-      // Get the value from the contract to prove it worked.
-      const response = await contract.methods.get().call();
-      // Update state with the result.
-      setStorageValue(response);
-    };
-    if (
-      typeof web3 !== "undefined" &&
+    typeof web3 !== "undefined" &&
       typeof accounts !== "undefined" &&
-      typeof contract !== "undefined"
-    ) {
-      load();
-    }
+      typeof contract !== "undefined" &&
+      (async () => {
+        // Stores a given value, 5 by default.
+        await contract.methods.set(5).send({ from: accounts[0] });
+        // Get the value from the contract to prove it worked.
+        const response = await contract.methods.get().call();
+        // Update state with the result.
+        setStorageValue(response);
+      })();
   }, [web3, accounts, contract]);
 
-  //     if (!this.state.web3) {
-  //       return <div>Loading Web3, accounts, and contract...</div>;
-  //     }
+  if (!web3) {
+    return <div>Loading Web3, accounts, and contract...</div>;
+  }
 
   return (
     <>

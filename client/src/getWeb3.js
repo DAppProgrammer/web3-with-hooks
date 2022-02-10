@@ -9,7 +9,15 @@ const getWeb3 = () =>
         const web3 = new Web3(window.ethereum);
         try {
           // Request account access if needed
-          await window.ethereum.enable();
+          //await window.ethereum.enable();
+          try {
+            // Request account access
+            await window.ethereum.request({ method: "eth_requestAccounts" });
+          } catch (error) {
+            // User denied account access...
+            console.error("User denied account access");
+          }
+
           // Accounts now exposed
           resolve(web3);
         } catch (error) {
